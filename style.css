@@ -1,8 +1,12 @@
 :root {
   --rojo-uni: #9e0b0f;
   --azul-dark: #1a1a2e;
+  --verde-sin: #1b5e20;
+  --rojo-ant: #b71c1c;
   --texto: #333;
   --sombra: rgba(0,0,0,0.15);
+  --gris-def: #555;
+  --fondo-ficha: #fff;
 }
 
 * {
@@ -15,7 +19,6 @@ body {
   background-color: #f0f2f5;
   font-family: 'Segoe UI', system-ui, sans-serif;
   color: var(--texto);
-  margin: 0;
   padding: 20px;
 }
 
@@ -29,19 +32,47 @@ header {
   border-bottom: 5px solid var(--rojo-uni);
 }
 
+#buscador {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 30px;
+}
+
+/* ===============================
+   Contenedor de fichas
+=============================== */
 .contenedor-fichas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* 3 fichas por fila en desktop */
   gap: 25px;
-  max-width: 1300px;
+  max-width: 1200px; /* Ajusta según tu preferencia */
   margin: 0 auto;
 }
 
+/* Responsivo */
+@media (max-width: 900px) {
+  .contenedor-fichas {
+    grid-template-columns: repeat(2, 1fr); /* 2 por fila en tablets */
+  }
+}
+
+@media (max-width: 600px) {
+  .contenedor-fichas {
+    grid-template-columns: 1fr; /* 1 por fila en móviles */
+  }
+}
+
+/* ===============================
+   Fichas
+=============================== */
 .ficha {
-  background: #fff;
+  background: var(--fondo-ficha);
   border-radius: 12px;
   box-shadow: 0 4px 15px var(--sombra);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid #ddd;
   overflow: hidden;
 }
@@ -49,6 +80,7 @@ header {
 .ficha:hover {
   transform: translateY(-8px);
   border-color: var(--rojo-uni);
+  box-shadow: 0 8px 20px var(--sombra);
 }
 
 .ficha-header {
@@ -62,48 +94,66 @@ header {
 
 .ficha-header h2 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   letter-spacing: 1px;
 }
 
 .id {
   font-weight: bold;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.25);
   padding: 3px 10px;
   border-radius: 5px;
 }
 
 .ficha-body {
-  padding: 20px;
+  padding: 25px 20px;
 }
 
 .ficha-body p {
-  margin: 8px 0;
-  line-height: 1.5;
+  margin: 12px 0;
+  line-height: 1.8;
+}
+
+.def {
+  font-style: italic;
+  color: var(--gris-def);
+  background: #f9f9f9;
+  padding: 10px 15px;
+  border-left: 4px solid var(--rojo-uni);
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.sin, .ant {
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.sin {
+  background-color: rgba(27, 94, 32, 0.15);
+  color: var(--verde-sin);
+}
+
+.ant {
+  background-color: rgba(183, 28, 28, 0.15);
+  color: var(--rojo-ant);
 }
 
 strong {
   font-size: 0.75rem;
-  color: #666;
   text-transform: uppercase;
   display: block;
-  margin-bottom: 2px;
+  margin-bottom: 5px;
+  color: #444;
 }
-
-.sin { color: #1b5e20; font-weight: 500; }
-.ant { color: #b71c1c; font-weight: 500; }
-.def { font-style: italic; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
 
 footer {
   text-align: center;
   padding: 40px;
   color: #777;
   font-size: 0.9rem;
-}
-
-#buscador {
-  width: 100%;
-  padding: 10px;
-  outline: none;
-  margin-top: 30px;
 }
