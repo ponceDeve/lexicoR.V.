@@ -1,80 +1,103 @@
 import { palabras } from './data.js';
 
-// Referencias al DOM - Los cimientos de nuestra lógica
+// ------------------ Referencias al DOM ------------------
 const contenedor = document.getElementById('glosario-container');
 const buscador = document.getElementById('buscador');
 const filtroAbc = document.getElementById('filtro-abc');
 const header = document.getElementById('main-header');
 
-// 1. Generar el abecedario de forma automática para evitar yerros manuales
+// ------------------ Generar abecedario automáticamente ------------------
 const letras = "abcdefghijklmnñopqrstuvwxyz".split("");
 letras.forEach(l => {
-    const option = document.createElement('option');
-    option.value = l;
-    option.textContent = l.toUpperCase();
-    filtroAbc.appendChild(option);
+  const option = document.createElement('option');
+  option.value = l;
+  option.textContent = l.toUpperCase();
+  filtroAbc.appendChild(option);
 });
 
-// 2. Función para renderizar las fichas con léxico UNI
-function renderizar(texto = "", letra = "") {
-    contenedor.innerHTML = ""; // Limpiamos el contenedor
-
-    const filtradas = palabras.filter(p => {
-        const coincideTexto = p.termino.toLowerCase().includes(texto.toLowerCase()) || 
-                             p.definicion.toLowerCase().includes(texto.toLowerCase());
-        const coincideLetra = letra === "" || p.termino.toLowerCase().startsWith(letra);
-        return coincideTexto && coincideLetra;
-    });
-
-    if (filtradas.length === 0) {
-        contenedor.innerHTML = `<p class="mensaje-vacio">No hay esa palabra, memo. Sigue estudiando.</p>`;
-        return;
-    }
-
-    filtradas.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'ficha';
-        div.innerHTML = `
-            <div class="ficha-header">
-                <span class="id">${p.id}</span>
-                <h2>${p.termino}</h2>
-            </div>
-            <div class="ficha-body">
-                <p class="def"><strong>Definición</strong>${p.definicion}</p>
-                <div class="sin"><strong>Sinónimos</strong>${p.sinonimos}</div>
-                <div class="ant"><strong>Antónimos</strong>${p.antonimos}</div>
-            </div>
-        `;
-        contenedor.appendChild(div);
-    });
+// ------------------ Función para limpiar tildes ------------------
+function normalizar(texto) {
+  return texto
+    .normalize("NFD")       // descompone caracteres con acentos
+    .replace(/[\u0300-\u036f]/g, "") // elimina acentos
+    .toLowerCase();
 }
 
-// 3. Eventos de búsqueda (Diligencia en tiempo real)
-buscador.addEventListener('input', () => {
-    filtroAbc.value = ""; // Si escribe, reseteamos la letra
-    renderizar(buscador.value, "");
-});
+// ------------------ Función de renderizado ------------------
+function renderizar(texto = "", letra = "") {
+  contenedor.innerHTML = "";
+
+  const textoNorm = normalizar(texto);
+  const letraNorm = normalizar(letra);
+
+  const filtradas = palabras.filter(p => {
+    const terminoNorm = normalizar(p.termino);
+
+    // Solo coincidencia al inicio del término
+    const coincideTexto = textoNorm === "" || terminoNorm.startsWith(textoNorm);
+    const coincideLetra = letraNorm === "" || terminoNorm.startsWith(letraNorm);
+
+    return coincideTexto && coincideLetra;
+  });
+
+  if (filtradas.length === 0) {
+    contenedor.innerHTML = `<p class="mensaje-vacio">No hay esa palabra, memo. Sigue estudiando.</p>`;
+    return;
+  }
+
+  // Fragmento para evitar repintados repetidos
+  const fragment = document.createDocumentFragment();
+  filtradas.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'ficha';
+    div.innerHTML = `
+      <div class="ficha-header">
+        <span class="id">${p.id}</span>
+        <h2>${p.termino}</h2>
+      </div>
+      <div class="ficha-body">
+        <p class="def"><strong>Definición:</strong> ${p.definicion}</p>
+        <div class="sin"><strong>Sinónimos:</strong> ${p.sinonimos}</div>
+        <div class="ant"><strong>Antónimos:</strong> ${p.antonimos}</div>
+      </div>
+    `;
+    fragment.appendChild(div);
+  });
+  contenedor.appendChild(fragment);
+}
+
+// ------------------ Función debounce ------------------
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+
+// ------------------ Eventos ------------------
+buscador.addEventListener('input', debounce(() => {
+  filtroAbc.value = ""; // Limpiamos filtro por letra si escribe
+  renderizar(buscador.value, "");
+}, 200));
 
 filtroAbc.addEventListener('change', () => {
-    buscador.value = ""; // Si elige letra, reseteamos el buscador
-    renderizar("", filtroAbc.value);
+  buscador.value = ""; // Limpiamos buscador si elige letra
+  renderizar("", filtroAbc.value);
 });
 
-// 4. Lógica de Scroll: Ocultar al bajar, mostrar al subir
+// ------------------ Scroll header ------------------
 let lastScrollY = window.scrollY;
-
 window.addEventListener('scroll', () => {
-    if (window.scrollY > lastScrollY && window.scrollY > 100) {
-        // Bajando: El header se vuelve un óbice, lo ocultamos
-        header.classList.remove('header-visible');
-        header.classList.add('header-hidden');
-    } else {
-        // Subiendo: Necesitamos los controles, lo mostramos
-        header.classList.remove('header-hidden');
-        header.classList.add('header-visible');
-    }
-    lastScrollY = window.scrollY;
+  if (window.scrollY > lastScrollY && window.scrollY > 100) {
+    header.classList.remove('header-visible');
+    header.classList.add('header-hidden');
+  } else {
+    header.classList.remove('header-hidden');
+    header.classList.add('header-visible');
+  }
+  lastScrollY = window.scrollY;
 });
 
-// Inicialización plenaria
+// ------------------ Inicialización ------------------
 renderizar();
