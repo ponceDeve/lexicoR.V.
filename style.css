@@ -112,6 +112,7 @@ header {
 .ficha-body p {
   margin: 12px 0;
   line-height: 1.8;
+  width: 100%;
 }
 
 .def {
