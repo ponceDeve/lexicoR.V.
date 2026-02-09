@@ -1,0 +1,192 @@
+/* =========================================
+   Variables de Identidad UNI
+   ========================================= */
+:root {
+  --rojo-uni: #9e0b0f;
+  --azul-dark: #1a1a2e;
+  --verde-sin: #1b5e20;
+  --rojo-ant: #b71c1c;
+  --fondo-gris: #f4f7f6;
+  --blanco: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--fondo-gris);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #333;
+}
+
+/* =========================================
+   Header Animado (Scroll Dinámico)
+   ========================================= */
+#main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--azul-dark);
+  color: var(--blanco);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  z-index: 1000;
+  border-bottom: 5px solid var(--rojo-uni);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Clases de visibilidad controladas por app.js */
+.header-visible {
+  transform: translateY(0);
+}
+
+.header-hidden {
+  transform: translateY(-100%);
+}
+
+#main-header h1 {
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 1.5px;
+}
+
+.controles {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.controles input, 
+.controles select {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+}
+
+.controles input { flex: 3; }
+.controles select { flex: 1; cursor: pointer; font-weight: bold; }
+
+/* =========================================
+   Grid de Fichas
+   ========================================= */
+.grid-fichas {
+  margin-top: 160px; /* Margen para no quedar bajo el header inicial */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =========================================
+   Estilo de la Ficha
+   ========================================= */
+.ficha {
+  background: var(--blanco);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  transition: transform 0.3s ease;
+}
+
+.ficha:hover {
+  transform: translateY(-5px);
+  border-color: var(--rojo-uni);
+}
+
+.ficha-header {
+  background: var(--rojo-uni);
+  color: var(--blanco);
+  padding: 0.8rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ficha-header h2 { font-size: 1.3rem; }
+.id { background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; }
+
+.ficha-body { padding: 1.5rem; }
+
+.def {
+  font-size: 1.05rem;
+  margin-bottom: 1.2rem;
+  text-align: justify;
+}
+
+/* Títulos internos de la ficha */
+.def strong, .sin strong, .ant strong {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #777;
+  margin-bottom: 3px;
+}
+
+/* Sinónimos y Antónimos (Léxico Ingente) */
+.sin, .ant {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1.25rem; /* Letra grande para estudio */
+  font-weight: 500;
+}
+
+.sin {
+  background: #e8f5e9;
+  color: var(--verde-sin);
+  border-left: 6px solid var(--verde-sin);
+}
+
+.ant {
+  background: #ffebee;
+  color: var(--rojo-ant);
+  border-left: 6px solid var(--rojo-ant);
+}
+
+/* =========================================
+   Adaptabilidad Móvil (600px)
+   ========================================= */
+@media (max-width: 600px) {
+  #main-header { padding: 0.6rem; }
+  #main-header h1 { font-size: 1rem; margin-bottom: 0.5rem; }
+  
+  .controles { gap: 6px; }
+  .controles input, .controles select { font-size: 0.85rem; padding: 8px; }
+
+  .grid-fichas {
+    margin-top: 110px; /* Header más pequeño, margen más exiguo */
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .sin, .ant { font-size: 1.1rem; }
+}
+
+.mensaje-vacio {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem;
+  color: var(--rojo-ant);
+  font-weight: bold;
+}
+
+.footer-simple {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+  font-size: 0.8rem;
+}
