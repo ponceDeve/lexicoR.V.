@@ -1,0 +1,238 @@
+/* =========================================
+  Configuración y Variables
+   ========================================= */
+:root {
+  --rojo-uni: #9e0b0f;
+  --azul-dark: #1a1a2e;
+  --verde-sin: #1b5e20;
+  --rojo-ant: #b71c1c;
+  --fondo: #f4f7f6;
+  --blanco: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--fondo);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* =========================================
+  Header Sticky (Fijo arriba)
+   ========================================= */
+/* Reemplaza la sección del header con esta */
+.header-scroll {
+  position: fixed; /* Ahora es fijo para poder ocultarlo fuera de pantalla */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #1a1a2e;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  z-index: 1000;
+  border-bottom: 5px solid #9e0b0f;
+  transition: transform 0.4s ease-in-out; /* La magia de la animación */
+}
+
+/* Estado cuando se oculta (se desplaza hacia arriba fuera de la vista) */
+.header-scroll.hidden {
+  transform: translateY(-100%);
+}
+
+/* Estado cuando es visible */
+.header-scroll.active {
+  transform: translateY(0);
+}
+
+/* Menester: Añadir margen al main para que el header inicial no lo tape */
+.contenedor-fichas {
+  margin-top: 140px; /* Ajusta según el alto de tu header */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.header-sticky h1 {
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.controles {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.controles input, .controles select {
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+}
+
+.controles input { flex: 3; }
+.controles select { flex: 1; cursor: pointer; font-weight: bold; }
+
+/* =========================================
+  Grid de Fichas
+   ========================================= */
+.contenedor-fichas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.ficha {
+  background: var(--blanco);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  transition: transform 0.3s ease;
+}
+
+.ficha:hover {
+  transform: translateY(-5px);
+  border-color: var(--rojo-uni);
+}
+
+.ficha-header {
+  background: var(--rojo-uni);
+  color: var(--blanco);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ficha-header h2 { font-size: 1.5rem; }
+.id { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; }
+
+.ficha-body { padding: 1.5rem; }
+
+.def {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #444;
+  text-align: justify;
+}
+
+/* =========================================
+   Sinónimos y Antónimos (Todo el ancho)
+   ========================================= */
+.sin, .ant {
+  display: block; /* Asegura que ocupe todo el ancho */
+  width: 100%;
+  margin-top: 12px;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1.3rem; /* Letra ingente para estudio */
+  font-weight: 500;
+}
+
+.sin {
+  background: #e8f5e9;
+  color: var(--verde-sin);
+  border-left: 8px solid var(--verde-sin);
+}
+
+.ant {
+  background: #ffebee;
+  color: var(--rojo-ant);
+  border-left: 8px solid var(--rojo-ant);
+}
+
+.sin strong, .ant strong, .def strong {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   Mensajes y Footer
+   ========================================= */
+.mensaje-vacio {
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.footer-uni {
+  text-align: center;
+  padding: 3rem;
+  color: #888;
+  font-weight: bold;
+}
+
+/* =========================================
+  Adaptabilidad Móvil (600px o menos)
+   ========================================= */
+@media (max-width: 600px) {
+  .header-scroll {
+    padding: 0.6rem; /* Padding reducido al mínimo */
+  }
+  
+  .header-scroll h1 {
+    font-size: 1rem; /* Título más pequeño */
+    margin-bottom: 0.5rem;
+  }
+
+  .controles {
+    flex-direction: row; /* Mantenemos horizontal si es posible, o reducimos gaps */
+    gap: 6px;
+  }
+
+  .controles input {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .controles select {
+    padding: 8px;
+    font-size: 0.85rem;
+    flex: 0.4; /* Select más estrecho */
+  }
+
+  .contenedor-fichas {
+    /* Ajuste crucial: el margen superior ahora es menor porque el header es flaco */
+    margin-top: 110px; 
+    grid-template-columns: 1fr;
+    padding: 0.8rem;
+    gap: 1.5rem;
+  }
+
+  .ficha-body {
+    padding: 1.2rem;
+  }
+
+  .sin, .ant {
+    font-size: 1.05rem; /* Tamaño optimizado para smartphones */
+    padding: 10px;
+  }
+
+  .def {
+    font-size: 1rem;
+  }
+}
